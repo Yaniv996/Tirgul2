@@ -6,6 +6,11 @@ public class ThreadCheckArray implements Runnable
 	int[] array;
 	int b;
 	
+	 /**
+     * Constructor for ThreadCheckArray.
+     * 
+     * @param sd the shared data object
+     */
 	public ThreadCheckArray(SharedData sd) 
 	{
 		this.sd = sd;	
@@ -16,6 +21,13 @@ public class ThreadCheckArray implements Runnable
 		}		
 		winArray = new boolean[array.length];
 	}
+	
+	/**
+     * Recursively checks if there is a subset of the array that sums to the given number.
+     * 
+     * @param n the current index in the array
+     * @param b the remaining sum to check
+     */
 	
 	void rec(int n, int b)
 	{
@@ -31,7 +43,11 @@ public class ThreadCheckArray implements Runnable
 				flag = true;
 				synchronized (sd) 
 				{
-					sd.setFlag(true);
+					// sd.setFlag(true);orignal
+					if (!sd.getFlag()) {
+                        sd.setFlag(true);
+                        sd.setWinningThread(Thread.currentThread().getName());
+					}
 				}			
 			}
 			if (b == array[n-1])
@@ -50,6 +66,9 @@ public class ThreadCheckArray implements Runnable
 		rec(n-1, b);
 	}
 
+	/**
+     * Runs the thread, checking for the subset sum.
+     */
 	public void run() {
 		if (array.length != 1)
 			if (Thread.currentThread().getName().equals("thread1"))
@@ -63,7 +82,11 @@ public class ThreadCheckArray implements Runnable
 				flag = true;
 				synchronized (sd) 
 				{
-					sd.setFlag(true);
+					//sd.setFlag(true);
+					 if (!sd.getFlag()) {
+	                        sd.setFlag(true);
+	                        sd.setWinningThread(Thread.currentThread().getName());
+	                    }
 				}
 			}
 		if (flag)
