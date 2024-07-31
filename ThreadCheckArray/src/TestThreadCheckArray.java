@@ -35,7 +35,7 @@ public class TestThreadCheckArray {
 				e.printStackTrace();
 			}
 			
-			//end time measurement
+			//end time measurementygu
             long endTime = System.currentTimeMillis();
             
             System.out.println("Total execution time: " + (endTime - startTime) + " ms");
