@@ -1,7 +1,9 @@
 import java.util.Scanner;
 
 public class TestThreadCheckArray {
+	
 	public static void main(String[] args) {
+		
 		try (Scanner input = new Scanner(System.in)) {
 			Thread thread1, thread2;
 			System.out.println("Enter array size");
@@ -35,7 +37,7 @@ public class TestThreadCheckArray {
 				System.out.println("Sorry");
 				return;
 			}
-			System.out.println("Solution for b : " + sd.getB() + ",n = " + sd.getArray().length);
+			System.out.println("Solution for b = " + sd.getB() + ",n = " + sd.getArray().length);
 			System.out.print("I:    ");
 			for(int index = 0; index < sd.getArray().length ; index++)
 				System.out.print(index + "    ");
@@ -65,7 +67,44 @@ public class TestThreadCheckArray {
 				else
 					System.out.print("0    ");	
 			}
+			
+			////////CHANGE//////////////////////////////////////////////////////////////
+			ThreadCheckArray runnable1 = new ThreadCheckArray(sd);
+            ThreadCheckArray runnable2 = new ThreadCheckArray(sd);
+            thread1 = new Thread(runnable1, "thread1");
+            thread2 = new Thread(runnable2, "thread2");
+            thread1.start();
+            thread2.start();
+            try 
+            {
+                thread1.join();
+                thread2.join();
+            } 
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+
+            // Print runtime for each thread
+            System.out.println("/nRuntime for thread1: " + runnable1.getRuntime() + " nanoseconds");
+            System.out.println("Runtime for thread2: " + runnable2.getRuntime() + " nanoseconds");
+
+            /**
+             * USER 2 CHANGE: Prints the winning thread
+             */
+            /*
+            String winningThread = sd.getWinningThread();
+            if (winningThread != null) {
+                System.out.println("The thread that found the solution first: " + winningThread);
+            } else {
+                System.out.println("No thread found a solution.");
+            }
+
+            if (!sd.getFlag())
+            {
+                System.out.println("Sorry");
+                return;
+            }*/
 		}
 	}
-
 }

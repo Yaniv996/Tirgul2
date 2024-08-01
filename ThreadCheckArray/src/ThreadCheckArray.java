@@ -5,6 +5,8 @@ public class ThreadCheckArray implements Runnable
 	SharedData sd;
 	int[] array;
 	int b;
+	private long startTime;
+    private long endTime;
 	
 	public ThreadCheckArray(SharedData sd) 
 	{
@@ -15,6 +17,8 @@ public class ThreadCheckArray implements Runnable
 			b = sd.getB();
 		}		
 		winArray = new boolean[array.length];
+		startTime = 0; //CHANGE
+        endTime = 0; //CHANGE
 	}
 	
 	void rec(int n, int b)
@@ -49,8 +53,14 @@ public class ThreadCheckArray implements Runnable
 		}	
 		rec(n-1, b);
 	}
-
+	
+	/**
+	 * The method begins the run of both threads.
+	 */
 	public void run() {
+		
+		startTime = System.nanoTime(); //CHANGE: Record start time
+		
 		if (array.length != 1)
 			if (Thread.currentThread().getName().equals("thread1"))
 				rec(array.length-1, b - array[array.length - 1]);
@@ -75,5 +85,22 @@ public class ThreadCheckArray implements Runnable
 				sd.setWinArray(winArray);
 			}	
 		}
+		endTime = System.nanoTime(); // Record end time
+		if (flag) {
+            synchronized (sd) {
+                if (sd.getWinningThread() == null) {
+                    sd.setWinningThread(Thread.currentThread().getName());
+                }
+            }
+        }
+	}
+	
+	/**
+	 * USER 1 CHANGE: 
+	 * The methods calculates the total runtime of a thread and returns it.
+	 * @return the runtime of the thread.
+	 */
+	public long getRuntime() {
+        return endTime - startTime;
 	}
 }
