@@ -103,4 +103,6 @@ public class ThreadCheckArray implements Runnable
 	public long getRuntime() {
         return endTime - startTime;
 	}
+	
+	//////////////////////CHANGEEEEEEEEEEEEE////////////////////////////
 }
